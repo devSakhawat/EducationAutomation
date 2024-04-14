@@ -1,0 +1,7 @@
+/* Inside your component.css (or component.scss) file */
+.full-width-button {
+  background: #fff;
+}
+.full-width-button:hover{
+  background: #fff;
+}

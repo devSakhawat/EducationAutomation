@@ -1,0 +1,438 @@
+<div class="row">
+  <div class="form-part" *ngIf="userForm">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <div class="col-6">
+          <div class="form-group mb-1">
+            <label for="userId" class="forms-label text-end">User ID</label>
+            <input class="forms-control" type="number" formControlName="userId" placeholder="User ID" readonly>
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="loginName" class="forms-label text-end">Login Name</label>
+            <input class="forms-control" type="text" formControlName="loginName" id="loginName"
+              placeholder="Login Name">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="loginNameLocal" class="forms-label text-end">Login Name Local</label>
+            <input class="forms-control" type="text" formControlName="loginNameLocal" id="loginNameLocal"
+              placeholder="Login Name Local">
+          </div>
+        </div>
+
+        <div class="col-6">
+
+          <div class="form-group mb-1">
+            <label for="password" class="forms-label text-end">password</label>
+            <input class="forms-control" type="text" formControlName="password" id="password" placeholder="Password">
+          </div>
+
+          <!-- <div class="form-group">
+            <label for="userGroupId">User Group ID</label>
+            <input type="text" class="form-control" id="userGroupId" formControlName="UserGroupId"
+              [(ngModel)]="userGroup" [autoComplete]="'userGroup'">
+          </div> -->
+
+          <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">User Group</label>
+            <input matInput [matAutocomplete]="auto" formControlName="userGroupId" class="forms-control" />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let item of colorarraylist"
+                [value]="item.userGroupId">{{item.userGroupName}}</mat-option>
+
+            </mat-autocomplete>
+          </div>
+
+          <!-- <div class="example-container">
+            <mat-form-field>
+              <input matInput type="text" [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let item of options" [value]="item">
+                  {{item}}
+                </mat-option>
+              </mat-autocomplete> -->
+          <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+          <!-- </mat-form-field>
+          </div> -->
+
+          <!-- <div class="example-container">
+            <mat-form-field>
+              <input matInput [matAutocomplete]="auto" formControlName="userGroupId" />
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let item of filteroptionslist | async"
+                  [value]="item.userGroupId">{{item.userGroupId}}| {{item.userGroupName}}</mat-option>
+                <mat-option *ngFor="let item of colorarraylist"
+                  [value]="item.userGroupId">{{item.userGroupName}}</mat-option>
+
+              </mat-autocomplete>
+              <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input class="forms-control" type="text" formControlName="userGroupId" id="userGroupId"
+              placeholder="UserGroup ID" [matAutocomplete]="auto" (input)="onUserGroupInputChange($event)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUserGroup">
+              <mat-option *ngFor="let group of filteredUserGroups | async" [value]="group.userGroupId">
+                {{ group.userGroupName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- <div class="form-group">
+            <label for="userGroupId">User Group ID</label>
+            <select class="form-control" id="userGroupId" formControlName="UserGroupId" [autoComplete]="'userGroup'">
+              <option *ngIf="userGroups" [value]="null">-- Select a User Group --</option>
+              <option *ngFor="let userGroup of userGroups | async" [value]="userGroup.userGroupId">
+                {{ userGroup.userGroupName }}
+              </option>
+            </select>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <select class="forms-control" id="userGroupId" formControlName="userGroupId">
+              <option *ngIf="userGroupList" [value]="null">-- Select a User Group --</option>
+              <option *ngFor="let userGroup of userGroupList | async" [value]="userGroup.userGroupId">
+                {{userGroup.userGroupName}}
+              </option>
+            </select>
+          </div> -->
+
+          <!-- <div class="form-group">
+            <label for="userGroupId">User Group ID</label>
+            <select class="form-control" id="userGroupId" formControlName="UserGroupId">
+              <option *ngIf="userGroups" [value]="null">-- Select a User Group --</option>
+              <option *ngFor="let userGroup of userGroups | async" [value]="userGroup.userGroupId">
+                {{ userGroup.userGroupName }}
+              </option>
+            </select>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input class="forms-control" type="text" formControlName="userGroupId" id="userGroupId"
+                   placeholder="UserGroup ID" [matAutocomplete]="auto" (input)="onUserGroupInputChange($event)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUserGroup">
+              <mat-option *ngFor="let group of filteredUserGroups | async" [value]="group.userGroupId">
+                {{ group.userGroupName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input class="forms-control" type="text" formControlName="userGroupId" id="userGroupId"
+                   placeholder="UserGroup ID" [matAutocomplete]="auto" (input)="onUserGroupInputChange($event)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUserGroup">
+              <mat-option *ngFor="let group of filteredUserGroups | async" [value]="group.userGroupId">
+                {{ group.userGroupName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input formControlName="userGroupId" class="forms-control" type="text" id="userGroupId"
+              placeholder="UserGroup ID" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option>Red</mat-option>
+              <mat-option>Green</mat-option>
+              <mat-option>Blue</mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input matInput class="forms-control" type="text" formControlName="UserGroupId" id="UserGroupId"
+              placeholder="UserGroup ID" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUserGroup">
+              <mat-option *ngFor="let group of userGroups | async" [value]="group.userGroupId">
+                {{ group.userGroupName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input matInput [matAutocomplete]="auto" [formControl]="formcontrol" />
+            <mat-autocomplete autoActiveFirstOption #auto>
+              <mat-option *ngFor="let item of filteredUserGroups | async"
+                [value]="item.userGroupId">{{item.userGroupName}}</mat-option>
+
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <mat-form-field class="example-full-width">
+              <input matInput [matAutocomplete]="auto" [formControl]="formcontrol" />
+              <mat-autocomplete autoActiveFirstOption #auto>
+                  <mat-option *ngFor="let item of filteredUserGroups | async"
+                  [value]="item.userGroupId">{{item.userGroupName}}</mat-option>
+
+              </mat-autocomplete>
+            </mat-form-field>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="UserGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input class="forms-control" type="text" formControlName="UserGroupId" id="UserGroupId" placeholder="UserGroup ID"
+              [matAutocomplete]="auto" (input)="filterUserGroups($event.target.value)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUserGroup">
+              <mat-option *ngFor="let group of userGroups | async" [value]="group">
+                {{ group.userGroupName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+            <input class="forms-control" type="text" formControlName="userGroupId" id="userGroupId"
+                   placeholder="UserGroup ID" [matAutocomplete]="auto" (input)="filterUserGroups(userForm.get('userGroupId')?.value)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUserGroup">
+              <mat-option *ngFor="let group of filteredUserGroups | async" [value]="group.userGroupId">
+                {{ group.userGroupName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- <div class="form-group mb-1">
+            <label for="startDate" class="forms-label text-end">Start Date</label>
+            <input class="forms-control" type="date" formControlName="startDate" id="startDate" placeholder="Start Date">
+          </div> -->
+
+          <div class="form-group mb-1">
+            <label for="startDate" class="forms-label text-end">Start Date</label>
+            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" id="startDate"
+              placeholder="Start Date">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="endDate" class="forms-label text-end">End Date</label>
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" id="endDate"
+              placeholder="End Date">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+          </div>
+
+          <!-- <div class="form-group mb-1">
+            <label for="endDate" class="forms-label text-end">End Date</label>
+            <input  class="forms-control" type="date" formControlName="endDate" id="endDate" placeholder="End Date">
+          </div> -->
+
+          <div class="row mt-2 float-end font-16">
+            <div class="btn-group text-end">
+              <button class="px-5" mat-raised-button color="primary">
+                {{ userForm.get('userId')!.value ? 'Update' : 'Save' }}
+              </button>
+              <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">Reset</button>
+              <button class="px-5 ms-1" mat-stroked-button color="primary">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <!-- <div class="form-part" *ngIf="userForm">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="row g-3">
+      <div class="col-6">
+        <div class="form-group mb-1">
+          <label for="userId" class="forms-label text-end">User ID</label>
+          <input class="forms-control" type="number" formControlName="userId" placeholder="User ID" readonly>
+        </div>
+
+        <div class="form-group mb-1">
+          <label for="employeeId" class="forms-label text-end">Employee ID</label>
+          <input class="forms-control" type="number" formControlName="employeeId" id="employeeId"
+            placeholder="Employee ID">
+        </div>
+
+        <div class="form-group mb-1">
+          <label for="loginNameEnglish" class="forms-label text-end">Login Name English</label>
+          <input class="forms-control" type="text" formControlName="loginNameEnglish" id="loginNameEnglish"
+            placeholder="Login Name English">
+        </div>
+
+        <div class="form-group mb-1">
+          <label for="loginNameLocal" class="forms-label text-end">Login Name Local</label>
+          <input class="forms-control" type="text" formControlName="loginNameLocal" id="loginNameLocal"
+            placeholder="Login Name Local">
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="form-group mb-1">
+          <label for="password" class="forms-label text-end">password</label>
+          <input class="forms-control" type="text" formControlName="password" id="password" placeholder="Password">
+        </div>
+
+        <div class="form-group mb-1">
+          <label for="userGroupId" class="forms-label text-end">UserGroup ID</label>
+          <input class="forms-control" type="number" formControlName="userGroupId" id="userGroupId"
+            placeholder="UserGroup ID">
+        </div>
+
+
+        <div class="form-group mb-1">
+          <label for="startDate" class="forms-label text-end">Start Date</label>
+          <input class="forms-control" type="date" formControlName="startDate" id="startDate" placeholder="Start Date">
+        </div>
+
+        <div class="form-group mb-1">
+          <label for="endDate" class="forms-label text-end">End Date</label>
+          <input class="forms-control" type="date" formControlName="endDate" id="endDate" placeholder="End Date">
+        </div>
+
+        <div class="row mt-2 float-end font-16">
+          <div class="btn-group text-end">
+            <button class="px-5" mat-raised-button color="primary">
+              {{userForm.get('userId')!.value ? 'Update' : 'Save'}}
+            </button>
+            <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">Reset</button>
+            <button class="px-5 ms-1" mat-stroked-button color="primary">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div> -->
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilter($event)" #input class="search-form mb-1" placeholder="Search" type="text">
+      <div class="row">
+        <h2>All Users</h2>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="userId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> User ID </th>
+            <td mat-cell *matCellDef="let row">{{row.userId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="loginName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Login Name</th>
+            <td mat-cell *matCellDef="let row">{{row.loginName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="loginNameLocal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Login Name Local</th>
+            <td mat-cell *matCellDef="let row">{{row.loginNameLocal}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="password">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>password</th>
+            <td mat-cell *matCellDef="let row">{{row.password}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="userGroupId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group</th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="userGroupName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group Name</th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+            <td mat-cell *matCellDef="let row">{{row.startDate}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+            <td mat-cell *matCellDef="let row">{{row.endDate}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+
+              <!-- <button mat-icon-button matTooltip="Edit User Group" class="tbl-Action-btn" color="primary"
+                aria-label="Edit" (click)="userForm.patchValue(row)">
+                <mat-icon>edit</mat-icon>
+              </button> -->
+
+              <button mat-icon-button matTooltip="Edit User Group" class="tbl-Action-btn" color="primary"
+                aria-label="Edit" (click)="onEditUser(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="User Group Detail" color="basic" class="tbl-Action-btn"
+                aria-label="info" (click)="userDetail(row.userId)">
+                <mat-icon>info</mat-icon>
+              </button>
+              
+              <button mat-icon-button matTooltip="Delete User Group" color="warn" class="tbl-Action-btn"
+                aria-label="Delete" (click)="confirmationRowDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-body"></tr>
+
+          <tr *matNoDataRow class="mat-row">
+            <td colspan="2" class="mat-cell">No User group found.{{input.value}}</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 23, 100]" aria-lebel="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+
+  <ng-template #UserDetailDialog let-userData>
+    <h2 mat-dialog-title *ngIf="userData.loginName">Detail of {{userData.loginName }} </h2>
+    <mat-dialog-content>
+      <div class="row g-3">
+        <table>
+          <tr>
+            <th>User ID:</th>
+            <td>{{ userData.userId }}</td>
+          </tr>
+          <tr>
+            <th>Login Name:</th>
+            <td>{{ userData?.loginName }}</td>
+          </tr>
+          <tr>
+            <th>Password:</th>
+            <td>{{ userData?.password }}</td>
+          </tr>
+          <tr>
+            <th>User Group:</th>
+            <td>{{ userData?.userGroupName }}</td>
+          </tr>
+          <tr>
+            <th>Start Date:</th>
+            <td>{{ userData?.startDate }}</td>
+          </tr>
+          <tr>
+            <th>End Date:</th>
+            <td>{{ userData?.endDate }}</td>
+          </tr>
+        </table>
+      </div>
+    </mat-dialog-content>
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close>Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #ConfirmationDelete let-user>
+    <h2 mat-dialog-title>Confirm Delete</h2>
+    <mat-dialog-content>
+      Are you sure you want to delete {{user?.loginName }} user?
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close color="primary">Cancel</button>
+      <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+    </mat-dialog-actions>
+  </ng-template>

@@ -1,0 +1,181 @@
+<div class="row">
+  <div class="form-part" *ngIf="linkUserGroupScreenForm">
+    <form [formGroup]="linkUserGroupScreenForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="form-group mb-1">
+            <label for="linkUserGroupScreenId" class="forms-label text-end">Link User Group Screen ID</label>
+            <input matInput formControlName="linkUserGroupScreenId" readonly placeholder="Link User Group Screen ID"
+              type="number" class="forms-control">
+          </div>
+
+          <!-- User Group ID Autocomplete -->
+          <div class="form-group mb-1">
+            <label for="moduleId" class="forms-label text-end">User Group</label>
+            <input matInput formControlName="userGroupName" (focus)="applyFilter($event, 'userGroupId')"
+              (input)="applyFilter($event, 'userGroupId')" [matAutocomplete]="userGroupAuto" class="forms-control"
+              placeholder="User Group" type="text" />
+            <mat-autocomplete #userGroupAuto="matAutocomplete" (optionSelected)="onUserGroupSelected($event)">
+              <mat-option *ngFor="let item of filterOptionsUserGroupList" [value]="item">
+                {{ item.userGroupName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+
+          <!-- Screen ID Autocomplete -->
+          <div class="form-group mb-1">
+            <label for="screenId" class="forms-label text-end">Screen ID</label>
+            <input matInput formControlName="screenName" (focus)="applyFilter($event, 'screenId')"
+              (input)="applyFilter($event, 'screenId')" [matAutocomplete]="screenAuto" class="forms-control"
+              placeholder="Screen" type="text" />
+            <mat-autocomplete #screenAuto="matAutocomplete" (optionSelected)="onScreenSelected($event)">
+              <mat-option *ngFor="let item of filterOptionScreenList" [value]="item">
+                {{ item.screenName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row my-2 float-end font-16">
+        <div class="btn-group text-end">
+          <button class="px-5" mat-raised-button color="primary">
+            {{ (linkUserGroupScreenForm.get('linkUserGroupScreenId')!.value ) ? 'Update' : 'Save' }}
+          </button>
+          <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">Reset</button>
+          <button class="px-5 ms-1" mat-stroked-button color="primary">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-from mb-1 col-6" placeholder="Search"
+        type="text">
+      <div class="row">
+        <h2>All User Group Screen</h2>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="userGroupName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group Name</th>
+            <td mat-cell *matCellDef="let row" class="text-start">
+              <button mat-button class="full-width-button" (click)="openInsertUserGroupScreenDialog(row)">
+                {{ row.userGroupName }}
+              </button>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let row" class="text-start">
+
+              <button mat-icon-button matTooltip="Edit User Group Screen" class="tbl-Action-btn" color="primary"
+                aria-label="Edit" (click)="openInsertUserGroupScreenDialog(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Edit User Group Screen" class="tbl-Action-btn" color="primary"
+                aria-label="Edit" (click)="onEditLinkUserGroupScreen(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="User Group Screen Detail" color="basic" class="tbl-Action-btn"
+                aria-label="info" (click)="linkUserGroupScreenDetail(row.screenId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete User Group Screen" color="warn" class="tbl-Action-btn"
+                aria-label="Delete" (click)="confirmationRowDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-body"></tr>
+
+          <tr *matNoDataRow class="mat-row">
+            <td colspan="2" class="mat-cell">No record found.{{input.value}}</td>
+          </tr>
+
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" arial-lebel="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- <ng-template [ngTemplateOutlet]="outlet" [ngOutletContext]="context"></ng-template> -->
+<ng-template #LinkUserGroupScreenDetailDialog let-linkUserGroupScreenData>
+  <h2 mat-dialog-title *ngIf="linkUserGroupScreenData.userGroupName">Detail of {{linkUserGroupScreenData.userGroupName
+    }} </h2>
+  <mat-dialog-content>
+    <div class="row g-3">
+      <table>
+        <tr>
+          <th>link User Group Screen ID:</th>
+          <td>{{ linkUserGroupScreenData.linkUserGroupScreenId }}</td>
+        </tr>
+        <tr>
+          <th>User Group Name:</th>
+          <td>{{ linkUserGroupScreenData?.userGroupName }}</td>
+        </tr>
+        <tr>
+          <th>Screen Name:</th>
+          <td>{{ linkUserGroupScreenData?.screenName }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+<ng-template #ConfirmationDelete let-row>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+  <mat-dialog-content>
+    Are you sure you want to delete {{row?.moduleName }} ?
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #InsertUserGroupScreenPermission let-row>
+  <h2 mat-dialog-title>Edit User Group Screen - {{ row.userGroupName }}</h2>
+  <mat-dialog-content>
+    <!-- <form [formGroup]="linkUserGroupScreenForm"> -->
+    <form [formGroup]="permissionForm">
+      <input type="hidden" formControlName="linkUserGroupScreenId" />
+      <div>
+        <label for="userGroupId">User Group ID:</label>
+        <input type="text" id="userGroupId" formControlName="userGroupId" readonly />
+      </div>
+
+      <div>
+        <label for="userGroupName">User Group Name:</label>
+        <input type="text" id="userGroupName" formControlName="userGroupName" readonly />
+      </div>
+
+      <div formArrayName="screens">
+        <div *ngFor="let screen of screensArray.controls; let i = index">
+          <input type="checkbox" [formControl]="convertToFormControl(screen.get('isChecked'))"/>
+          <label>{{ screen.value.screenName }}</label>
+          <input type="hidden" [formControl]="convertToFormControl(screen.get('screenId'))" />
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button type="submit" (click)="submitData()" mat-dialog-close color="primary">Save</button>
+  </mat-dialog-actions>
+</ng-template>

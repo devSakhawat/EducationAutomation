@@ -1,0 +1,78 @@
+<div class="form-part" *ngIf="linkClassSubjectForm">
+  <form [formGroup]="linkClassSubjectForm">
+    <!-- linkClassSubjectId -->
+    <input type="number" formControlName="linkClassSubjectId" hidden />
+    <input type="number" formControlName="classSubjectId" value= "0" hidden />
+    <!-- Class Dropdown -->
+    <div>
+      <label for="classId">Select Class</label>
+      <select id="classId" formControlName="classId">
+        <option *ngIf="classes; else loadingPlaceholder" [value]="null" selected>
+          -- Select Class --
+        </option>
+        <option *ngFor="let class of classes" [value]="class.classId">
+          {{ class.className }}
+        </option>
+      </select>
+      <ng-template #loadingPlaceholder>
+        <option value="" disabled selected>Loading Class...</option>
+      </ng-template>
+    </div>
+
+    <!-- LinkClassGroup Dropdown -->
+    <div>
+      <label for="classGroupId">Select Group</label>
+      <select *ngIf="selectedLinkClassGroups" id="classGroupId" formControlName="classGroupId">
+        <option *ngIf="selectedLinkClassGroups; else loadingPlaceholder" [value]="null" selected>
+          -- Select Group --
+        </option>
+        <option *ngFor="let classGroup of selectedLinkClassGroups" [value]="classGroup.classGroupId">
+          {{ classGroup.classGroupName }}
+        </option>
+      </select>
+      <!-- <select *ngIf="selectedLinkClassGroups" id="linkClassGroupId" formControlName="linkClassGroupId">
+        <option *ngIf="selectedLinkClassGroups; else loadingPlaceholder" [value]="null" selected>
+          -- Select Group -- 
+        </option>
+        <option *ngFor="let classGroup of selectedLinkClassGroups" [value]="classGroup.classGroupId">
+          {{ classGroup.classGroupName }}
+        </option>
+      </select>      
+      <ng-template #elseBlock>
+        <select *ngIf="linkClassGroups" id="linkClassGroupId" formControlName="linkClassGroupId">
+          <option *ngIf="linkClassGroups; else loadingPlaceholder" [value]="null" selected>
+            -- Select Group --
+          </option>
+          <option *ngFor="let classGroup of linkClassGroups" [value]="classGroup.classGroupId">
+            {{ classGroup.classGroupName }}
+          </option>
+        </select>
+      </ng-template> -->
+      <ng-template #loadingPlaceholder>
+        <option value="" disabled selected>Loading Group...</option>
+      </ng-template>
+    </div>
+
+    <!-- Subjects -->
+    <div>
+      <label>Subjects</label>
+      <div formArrayName="subjects">
+        <div *ngFor="let subject of subjectsArray.controls; let i = index" (click)="toggleCheckBox(i)">
+          <input type="checkbox" [formControl]="convertToFormControl(subject.get('isChecked'))" />
+          <label>{{ subject.value.classSubjectName }}</label>
+          <input type="hidden" [formControl]="convertToFormControl(subject.get('classSubjectId'))" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2 float-end font-16">
+      <div class="btn-group text-end">
+        <button class="px-5" mat-raised-button color="primary" (click)="onSubmit()">
+          {{ linkClassSubjectForm.get("linkClassSubjectId")!.value ? "Update" : "Save" }}
+        </button>
+        <button class="px-5 ms-1" type="button" mat-raised-button (click)="resetForm()"> Reset </button>
+        <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+      </div>
+    </div>
+  </form>
+</div>

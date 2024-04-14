@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="form-part" *ngIf="classGroupForm">
+    <form [formGroup]="classGroupForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <div class="col-6">
+
+          <!-- Group ID -->
+          <div>
+            <!-- <label for="classGroupId" class="forms-label text-end">Group ID</label> -->
+            <input id="classGroupId" class="forms-control" type="number" formControlName="classGroupId" placeholder="Group ID" hidden />
+          </div>
+
+          <!-- Group Name -->
+          <div class="form-group mb-1">
+            <label for="classGroupName" class="forms-label text-end">Group Name</label>
+            <input id="classGroupName" class="forms-control" type="text" formControlName="classGroupName" placeholder="Group Name" />
+            <div *ngIf="classGroupForm?.get('classGroupName')?.hasError('required') && classGroupForm?.get('classGroupName')?.touched" class="text-danger">
+              Group name is required.
+            </div>
+          </div>
+
+          <div class="row mt-2 float-end font-16">
+            <div class="btn-group text-end">
+              <button class="px-5" mat-raised-button color="primary">
+                {{ classGroupForm.get("classGroupId")!.value ? "Update" : "Save" }}
+              </button>
+              <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()"> Reset </button>
+              <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search"
+        type="text" />
+      <div class="row">
+        <h2>All Groups</h2>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- loading start -->
+          <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+            <div class="loading-rate-limit-reached" *ngIf="isRateLimitReached"></div>
+          </div>
+          <!-- end loading -->
+
+          <!-- Group Id Column -->
+          <!-- <ng-container matColumnDef="classGroupId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Section ID</th>
+            <td mat-cell *matCellDef="let row">{{ row.classGroupId }}</td>
+          </ng-container> -->
+
+          <!-- Group Name -->
+          <ng-container matColumnDef="classGroupName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Group Name
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.classGroupName }}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+              <button mat-icon-button matTooltip="Edit" class="tbl-Action-btn" color="primary" aria-label="Edit"
+                (click)="onEdit(row.classGroupId)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Detail" color="basic" class="tbl-Action-btn" aria-label="info"
+                (click)="onDetail(row.classGroupId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete" color="warn" class="tbl-Action-btn" aria-label="Delete"
+                (click)="onDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-body"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No shift found.{{ input.value }}
+            </td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #DetailDialog let-data>
+  <h2 mat-dialog-title *ngIf="data.classGroupName">
+    Detail of <strong>{{ data.classGroupName }}</strong>
+  </h2>
+  <mat-dialog-content>
+    <div class="row g-3">
+      <table>
+        <tr>
+          <th>Group ID</th>
+          <td>{{ data.classGroupId }}</td>
+        </tr>
+        <tr>
+          <th>Group Name</th>
+          <td>{{ data.classGroupName }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+<ng-template #DeleteDialog let-data>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+  <mat-dialog-content>
+    Are you sure you want to delete <strong>{{ data.classGroupName }}</strong>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+  </mat-dialog-actions>
+</ng-template>
+

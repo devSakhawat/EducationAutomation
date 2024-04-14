@@ -1,0 +1,87 @@
+<div class="form-part" *ngIf="linkClassShiftForm">
+   <form [formGroup]="linkClassShiftForm">
+     <!-- linkClassShiftId -->
+     <input type="number" formControlName="linkClassShiftId" hidden />
+     <!-- Class Dropdown -->
+     <div>
+       <label for="classId">Select Class</label>
+       <select id="classId" formControlName="classId">
+         <option *ngIf="classes; else loadingPlaceholder" [value]="null" selected>
+           -- Select Class --
+         </option>
+         <option *ngFor="let class of classes" [value]="class.classId">
+           {{ class.className }}
+         </option>
+       </select>
+       <ng-template #loadingPlaceholder>
+         <option value="" disabled selected>Loading Class...</option>
+       </ng-template>
+     </div>
+ 
+     <!-- Class Shift -->
+     <div>
+       <label>Class Shifts</label>
+       <div formArrayName="shifts">
+         <div *ngFor="let shift of shiftsArray.controls; let i = index" (click)="toggleCheckBox(i)">
+           <input type="checkbox" [formControl]="convertToFormControl(shift.get('isChecked'))" />
+           <label>{{ shift.value.classShiftName }}</label>
+           <input type="hidden" [formControl]="convertToFormControl(shift.get('classShiftId'))" />
+         </div>
+       </div>
+     </div>
+ 
+     <div class="row mt-2 float-end font-16">
+       <div class="btn-group text-end">
+         <button class="px-5" mat-raised-button color="primary" (click)="onSubmit()">
+           {{ linkClassShiftForm.get("linkClassShiftId")!.value ? "Update" : "Save" }}
+         </button>
+         <button class="px-5 ms-1" type="button" mat-raised-button (click)="resetForm()"> Reset </button>
+         <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+       </div>
+     </div>
+   </form>
+ </div>
+ 
+
+
+
+
+
+<!-- <div class="form-part" *ngif="linkClassShiftForm">
+   <form [formGroup]="linkClassShiftForm">
+      <input type="hidden" formcControlName="linkClassShiftId">
+
+      <div>
+         <label for="classId">Select Class</label>
+         <select name="" id="classId" formControlName="classId">
+            <option *ngIf="classes; else loadingPlaceholder" [value]="null" selected>-- Select Class --</option>
+            <option *ngIf="let class of classes" [value]="class.classId">
+               {{ class.className }}
+            </option>
+         </select>
+         <ng-template #loadingPlaceholder>
+            <option value="" disabled selected>Loading Class...</option>
+         </ng-template>
+      </div>
+
+
+      <div>
+         <label for="">Class Shift</label>
+         <div formArrayName="shifts">
+            <div *ngFor="let Shift of shiftsArray.controls; let i=index" (click)="toggleCheckbox(i)">
+               <input type="checkbox" [formControl]="convertToFormControl(shift.get('isChecked'))" />
+               <label for="">{{shift.value.classShift}}</label>
+               <input type="hidden" [formControl]="convertToFormControl(shift.get('classShiftId'))" />
+            </div>
+         </div>
+      </div>
+
+      <div>
+         <button mat-raised-button color="primary" (click)="onSubmit()">
+            {{ linkClassShiftForm.get("linkClassShiftId")!.value ? "Update" : "Save"}}
+         </button>
+         <button type="button" rat-rised-button (click)="resetForm()"> Reset </button>
+         <button mat-stroked-button color="primary"> Close </button>
+      </div>
+   </form>
+</div> -->

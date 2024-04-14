@@ -1,0 +1,139 @@
+<mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center" class="nav sticky">
+  <!-- left box of toolbar starts -->
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-icon-button matTooltip="Sidebar" (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <!-- <a mat-icon-button matTooltip="Dashboard" [routerLink]="['/dashboard']">
+      <mat-icon>home</mat-icon>
+    </a> -->
+    <img matTooltip="Home" [routerLink]="" src="assets/images/logo/Pbd-Logo.png" class="Logo hand-icon" alt="PDB Soft Ltd">
+    <!-- <span>PBDSoft</span> -->
+  </div>
+  <!-- left box of toolbar ends -->
+
+  <!-- center box of toolbar starts -->
+  <div>
+    <button type="button" mat-stroked-button (click)="showStatistics = !showStatistics" fxHide.lt-md="true"
+      matTooltip="Click to expand / collapse Stattistics" matTooltipPosition="right" matTooltipClass="yellow-back"
+      matTooltipHideDelay="200">
+      <mat-icon>analytics</mat-icon>
+      <span class="ml mr">Statistics</span>
+      <mat-icon class="rotatable" [ngClass]="{'rotate-180' : showStatistics}">keyboard_arrow_down</mat-icon>
+    </button>
+  </div>
+  <!-- center box of toolbar ends -->
+
+  <!-- right box of toolbar starts -->
+  <div>
+    <!-- user -->
+    <button type="button" mat-stroked-button class="mr" fxHide.lt-md="true" [matMenuTriggerFor]="user" matTooltip="User"
+      matTooltipClass="yellow-back">
+      <mat-icon>account_circle</mat-icon> User
+    </button>
+
+    <!-- notification -->
+    <button type="button" mat-icon-button [matMenuTriggerFor]="notifications" class="ml mr" matTooltip="Notifications" matTooltipClass="yellow-back">
+      <mat-icon matBadge="2" matBadgeColor="accent">notifications</mat-icon>
+    </button>
+
+    <!-- dot menu -->
+    <button type="button" mat-icon-button [matMenuTriggerFor]="topmenu" matTooltip="Menu" matTooltipClass="yellow-back">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+  <!-- right box of toolbar ends -->
+
+  <!-- menu top starts -->
+  <mat-menu #topmenu="matMenu">
+    <a [routerLink]="['/dashboard']" mat-menu-item>DashBoard</a>
+    <button mat-menu-item [matMenuTriggerFor]="user">User</button>
+    <button mat-menu-item [matMenuTriggerFor]="entity">A Entity</button>
+    <button mat-menu-item>Statistics</button>
+  </mat-menu>
+  <!-- menu top ends -->
+
+  <!-- User start-->
+  <mat-menu #user="matMenu">
+    <button mat-menu-item>Profile</button>
+    <button mat-menu-item>Change Password</button>
+    <button mat-menu-item>Logout</button>
+  </mat-menu>
+  <!-- User end-->
+
+  <!-- Notifications start -->
+  <mat-menu #notifications="matMenu">
+    <button mat-menu-item><mat-icon>email</mat-icon>Email form John</button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item> <mat-icon>receipt_long</mat-icon> Send Bills to Customers </button>
+  </mat-menu>
+  <!-- Notifications end -->
+
+  <!-- User start -->
+  <mat-menu #entity="matMenu">
+    <a [routerLink]="['/entity']" mat-menu-item>New Record</a>
+    <a [routerLink]="['/record-list']" mat-menu-item>Record List</a>
+  </mat-menu>
+  <!-- User end -->
+
+</mat-toolbar>
+
+<!-- expansion center box of toolbar starts -->
+<mat-expansion-panel [expanded]="showStatistics">
+  <div class="mt" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
+    <div class="font-weight-bold">Bookings Summary: </div>
+
+    <div matTooltip="Total Bookings in this week" matRipple class="p-10 hand-icon">
+      <div>This Week:</div>
+      <div class="font-weight-bold">108 Bookings</div>
+    </div>
+
+    <div matTooltip="Total Bookings in this month" matRipple class="p-10 hand-icon">
+      <div>This Month:</div>
+      <div class="font-weight-bold">595 Bookings</div>
+    </div>
+
+    <div matTooltip="Total Bookings in this year" matRipple class="p-10 hand-icon">
+      <div>This Year:</div>
+      <div class="font-weight-bold">5894 Bookings</div>
+    </div>
+
+  </div>
+</mat-expansion-panel>
+<!-- expansion center box of toolbar ends -->
+
+
+<mat-drawer-container class="drawer-container" autosize>
+  <mat-drawer #drawer class="drawer" mode="side" opened="true">
+    <!-- menu -->
+    <mat-nav-list class="sidebar-navlist">
+      <mat-expansion-panel hideToggle *ngFor="let mainMenu of mainMenus">
+        <mat-expansion-panel-header (click)="getSubMenus(mainMenu.screenId)">
+          <span>{{mainMenu.screenName}}</span>
+        </mat-expansion-panel-header>
+        <!-- SubMenu -->
+        <mat-nav-list *ngFor="let subMenu of subMenus">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header (click)="getNestedSubMenus(subMenu.screenId)">
+              <span matListItemTitle>{{ subMenu.screenName }}</span>
+            </mat-expansion-panel-header>
+
+            <!-- NestedSubMenu -->
+            <mat-nav-list *ngIf="nestedSubMenus">
+              <a mat-list-item *ngFor="let nestedSubMenu of nestedSubMenus">
+                <span matListItemTitle [routerLink]="['/', mainMenu.screenName.trim().toLowerCase().split(' ').join(''), nestedSubMenu.actionName.trim().toLowerCase().split(' ').join('')].join('/')">
+                  {{nestedSubMenu.screenName}}
+                </span>
+              </a>
+            </mat-nav-list>
+          </mat-expansion-panel>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-nav-list>
+    <!-- end mat-nav-list -->
+  </mat-drawer>
+
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>

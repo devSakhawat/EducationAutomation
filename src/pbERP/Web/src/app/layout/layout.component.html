@@ -1,0 +1,56 @@
+
+  <!-- Top menu start -->
+  <mat-toolbar color="secondary">
+    <mat-toolbar-row>
+      <button type="button" mat-button (click)="drawer.toggle()"> <mat-icon>menu</mat-icon></button>
+      <img src="assets/images/logo/Pbd-Logo.png" class="Logo" alt="PDB Soft Ltd">
+      <span class="separator"></span>
+      <a mat-button routerLink="/register">Register</a>
+      <a mat-button routerLink="/login">Login</a>
+      <!-- <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+        <mat-icon>share</mat-icon>
+      </button> -->
+    </mat-toolbar-row>
+  </mat-toolbar>  <!-- Top menu end -->
+
+
+  <!-- Main Container start -->
+  <mat-drawer-container>
+    <!-- side bar menu start -->
+    <mat-drawer #drawer opened="false" mode="side" class="side-bar">
+      <mat-nav-list>
+        <!-- <mat-list-item *ngFor="let mainMenu of mainMenus">
+          <span matListItemTitle>{{mainMenu.moduleName}}</span>
+        </mat-list-item> -->
+
+        <mat-expansion-panel *ngFor="let mainMenu of mainMenus" [class.mat-elevation-z0]="true">
+          <mat-expansion-panel-header (click)="getSubMenu(mainMenu.parentId)">
+            <span matListItemTitle>{{mainMenu.screenName}}</span>
+          </mat-expansion-panel-header>
+          <mat-nav-list *ngFor="let subMenu of subMenus">
+            <a mat-list-item routerLink="['/', subMenu.controllerName, subMenu.actionName].join('/')">
+              <span>{{subMenu.screenName}}</span>
+              <!-- <mat-icon>apple</mat-icon><span>{{subMenu.screenName}}</span> -->
+            </a>
+            <!-- <a mat-list-item routerLink="#">
+              <mat-icon>android</mat-icon><span>Android</span>
+            </a> -->
+          </mat-nav-list>
+        </mat-expansion-panel>
+
+      </mat-nav-list>
+    </mat-drawer> <!-- side bar menu end -->
+
+    <!-- Main content start -->
+    <mat-drawer-content class="m-2 pb-2">
+      
+      <!-- main content -->
+      <app-account></app-account>
+
+
+    </mat-drawer-content><!-- Main content end -->
+  </mat-drawer-container> <!-- Main Container end -->
+

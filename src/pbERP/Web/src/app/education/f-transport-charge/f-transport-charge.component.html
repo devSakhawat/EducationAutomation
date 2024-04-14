@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="form-part" *ngIf="transportChargeForm">
+    <form [formGroup]="transportChargeForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <div class="col-6">
+
+          <!-- transportChargeId -->
+          <div>
+            <input id="transportChargeId" class="forms-control" type="number" formControlName="transportChargeId"  hidden />
+          </div>
+
+          <!-- TransportCharge Name -->
+          <div class="form-group mb-1">
+            <label for="transportCharge" class="forms-label text-end">TransportCharge Name</label>
+            <input id="transportCharge" class="forms-control" type="text" formControlName="transportCharge"
+              placeholder="TransportCharge Name" />
+            <div *ngIf="transportChargeForm?.get('transportCharge')?.hasError('required') && transportChargeForm?.get('transportCharge')?.touched" class="text-danger">
+              Transport Charge name is required.
+            </div>
+          </div>
+
+          <!-- Transport -->
+          <div class="form-group mb-1">
+            <label for="transportId" class="forms-label text-end">Transport</label>
+            <select class="forms-control" id="transportId" formControlName="transportId" placeholder="Transport">
+              <option *ngIf="transports; else loadingPlaceholder" [value]="null" selected>
+                -- Select Transport --
+              </option>
+              <option *ngFor="let transport of transports" [value]="transport.transportId">
+                {{ transport.transportName }}
+              </option>
+            </select>
+
+            <ng-template #loadingPlaceholder>
+              <option value="" disabled selected>Loading Transport...</option>
+            </ng-template>
+          </div>
+
+          <!-- Transport Area -->
+          <div class="form-group mb-1">
+            <label for="transportAreaId" class="forms-label text-end">Transport Area</label>
+            <select class="forms-control" id="transportAreaId" formControlName="transportAreaId" placeholder="Transport Area">
+              <option *ngIf="transportAreas; else loadingPlaceholder" [value]="null" selected>
+                -- Select Transport Area --
+              </option>
+              <option *ngFor="let transportArea of transportAreas" [value]="transportArea.transportAreaId">
+                {{ transportArea.transportAreaName }}
+              </option>
+            </select>
+
+            <ng-template #loadingPlaceholder>
+              <option value="" disabled selected>Loading Transport Area ...</option>
+            </ng-template>
+          </div>
+
+          <div class="row mt-2 float-end font-16">
+            <div class="btn-group text-end">
+              <button class="px-5" mat-raised-button color="primary">
+                {{ transportChargeForm.get("transportChargeId")!.value ? "Update" : "Save" }}
+              </button>
+              <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()"> Reset </button>
+              <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search"
+        type="text" />
+      <div class="row">
+        <h2>All Students</h2>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- loading start -->
+          <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+            <div class="loading-rate-limit-reached" *ngIf="isRateLimitReached"></div>
+          </div>
+          <!-- end loading -->
+
+          <!-- Transport Name Column -->
+          <ng-container matColumnDef="transportName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Transport Name
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.transportName }}</td>
+          </ng-container>
+
+          <!-- Transport Area Name Column -->
+          <ng-container matColumnDef="transportAreaName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Transport Area Name
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.transportAreaName }}</td>
+          </ng-container>
+
+          <!-- Transport Charge Column -->
+          <ng-container matColumnDef="transportCharge">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Transport Charge
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.transportCharge }}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+              <button mat-icon-button matTooltip="Edit" class="tbl-Action-btn" color="primary" aria-label="Edit"
+                (click)="onEdit(row.transportChargeId)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Detail" color="basic" class="tbl-Action-btn" aria-label="info"
+                (click)="onDetail(row.transportChargeId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete" color="warn" class="tbl-Action-btn" aria-label="Delete"
+                (click)="onDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-body"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No Transport Charge found.{{ input.value }}
+            </td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #DetailDialog let-data>
+  <h2 mat-dialog-title *ngIf="data.transportCharge">
+    Detail of <strong>{{ data.transportCharge }}</strong>
+  </h2>
+  <mat-dialog-content>
+    <div class="row g-3">
+      <table>
+        <tr>
+          <th>TransportCharge ID</th>
+          <td>{{ data.transportChargeId }}</td>
+        </tr>
+        <tr>
+          <th>TransportCharge Name</th>
+          <td>{{ data.transportCharge }}</td>
+        </tr>
+        <tr>
+          <th>Transport Name</th>
+          <td>{{ data.transportAreaId }}</td>
+        </tr>
+        <tr>
+          <th>Transport Area Name</th>
+          <td>{{ data.transportAreaName }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+<ng-template #DeleteDialog let-data>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+  <mat-dialog-content>
+    Are you sure you want to delete <strong>{{ data.transportCharge }}</strong>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+  </mat-dialog-actions>
+</ng-template>
+
+

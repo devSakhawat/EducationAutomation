@@ -1,0 +1,147 @@
+<p>exam-b-short-code works!</p>
+<div class="row">
+    <div class="form-part" *ngIf="examShortCodeForm">
+        <form [formGroup]="examShortCodeForm" (ngSubmit)="onSubmit()">
+            <div class="row g-3">
+                <div class="col-6">
+
+                    <!-- examShortCodeId -->
+                    <div>
+                        <!-- <label for="examShortCodeId" class="forms-label text-end">examShortCodeId</label> -->
+                        <input id="examShortCodeId" class="forms-control" type="number"
+                            formControlName="examShortCodeId" placeholder="Exam Short Code Id" hidden />
+                    </div>
+
+                    <!-- Exam Short Code -->
+                    <div class="form-group mb-1">
+                        <label for="examShortCode" class="forms-label text-end">Exam Short Code</label>
+                        <input id="examShortCode" class="forms-control" type="text" formControlName="examShortCode"
+                            placeholder="Exam Short Code" />
+                        <div *ngIf="examShortCodeForm?.get('examShortCode')?.hasError('required') && examShortCodeForm?.get('examShortCode')?.touched"
+                            class="text-danger">
+                            Exam Short Code is required.
+                        </div>
+                    </div>
+
+                    <!-- Position -->
+                    <div class="form-group mb-1">
+                        <label for="position" class="forms-label text-end">Position</label>
+                        <input id="position" class="forms-control" type="number" formControlName="position"
+                            placeholder="Position" />
+                    </div>
+
+                    <div class="row mt-2 float-end font-16">
+                        <div class="btn-group text-end">
+                            <button class="px-5" mat-raised-button color="primary">
+                                {{ examShortCodeForm.get("examShortCodeId")!.value ? "Update" : "Save" }}
+                            </button>
+                            <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()"> Reset
+                            </button>
+                            <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="list-part">
+        <div class="row">
+            <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search"
+                type="text" />
+            <div class="row">
+                <h2>All Exam Short Code</h2>
+                <table mat-table [dataSource]="dataSource" matSort>
+                    <!-- loading start -->
+                    <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+                        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+                        <div class="loading-rate-limit-reached" *ngIf="isRateLimitReached"></div>
+                    </div>
+                    <!-- end loading -->
+
+                    <!-- Exam Short Code -->
+                    <ng-container matColumnDef="examShortCode">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Exam Short Code </th>
+                        <td mat-cell *matCellDef="let row">{{ row.examShortCode }}</td>
+                    </ng-container>
+
+                    <!-- Position -->
+                    <ng-container matColumnDef="position">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Position1</th>
+                        <td mat-cell *matCellDef="let row">{{ row.position }}</td>
+                    </ng-container>
+
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row" class="text-end">
+                            <button mat-icon-button matTooltip="Edit" class="tbl-Action-btn" color="primary"
+                                aria-label="Edit" (click)="onEdit(row.examShortCodeId)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+
+                            <button mat-icon-button matTooltip="Detail" color="basic" class="tbl-Action-btn"
+                                aria-label="info" (click)="onDetail(row.examShortCodeId)">
+                                <mat-icon>info</mat-icon>
+                            </button>
+
+                            <button mat-icon-button matTooltip="Delete" color="warn" class="tbl-Action-btn"
+                                aria-label="Delete" (click)="onDelete(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-body"></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">
+                            No Exam Short Code Found.{{ input.value }}
+                        </td>
+                    </tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #DetailDialog let-data>
+    <h2 mat-dialog-title *ngIf="data.examShortCode">
+      Detail of <strong>{{ data.examShortCode }}</strong>
+    </h2>
+    <mat-dialog-content>
+      <div class="row g-3">
+        <table>
+          <tr>
+            <th>Exam Short Code Id</th>
+            <td>{{ data.examShortCodeId }}</td>
+          </tr>
+          <tr>
+            <th>Exam Short Code</th>
+            <td>{{ data.examShortCode }}</td>
+          </tr>
+          <tr>
+            <th>Position</th>
+            <td>{{ data.position }}</td>
+          </tr>
+        </table>
+      </div>
+    </mat-dialog-content>
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close>Close</button>
+    </div>
+  </ng-template>
+  
+  <ng-template #DeleteDialog let-data>
+    <h2 mat-dialog-title>Confirm Delete</h2>
+    <mat-dialog-content>
+      Are you sure you want to delete <strong>{{ data.examShortCode }}</strong>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close color="primary">Cancel</button>
+      <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+    </mat-dialog-actions>
+  </ng-template>

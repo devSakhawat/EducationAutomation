@@ -1,0 +1,219 @@
+<div class="row">
+  <div class="form-part" *ngIf="screenForm">
+    <form [formGroup]="screenForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <div class="col-6">
+
+          <div class="form-group mb-1">
+            <label for="screenId" class="forms-label text-end">Screen ID</label>
+            <input class="forms-control" type="number" formControlName="screenId" placeholder="Screen ID" readonly>
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="screenName" class="forms-label text-end">Screen Name</label>
+            <input class="forms-control" type="text" formControlName="screenName" id="screenName"
+              placeholder="Screen Name">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="controllerName" class="forms-label text-end">Controller Name</label>
+            <input class="forms-control" type="text" formControlName="controllerName" id="controllerName"
+              placeholder="Controller Name">
+          </div>
+        </div>
+
+        <div class="col-6">
+
+          <div class="form-group mb-1">
+            <label for="actionName" class="forms-label text-end">Action Name</label>
+            <input class="forms-control" type="text" formControlName="actionName" id="actionName"
+              placeholder="Action Name">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="moduleId" class="forms-label text-end">Module</label>
+            <input matInput [matAutocomplete]="moduleAuto" formControlName="moduleId" class="forms-control" placeholder="Module"
+              (focus)="applyFilter($event, 'moduleId')" (input)="applyFilter($event, 'moduleId')" type="text">
+            <mat-autocomplete #moduleAuto="matAutocomplete" (optionSelected)="onModuleOptionSelected($event)">
+              <mat-option *ngFor="let item of filterOptionsModuleList" [value]="item">
+                {{ item.moduleName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+          
+          <div class="form-group mb-1">
+            <label for="parentId" class="forms-label text-end">Parent</label>
+            <input matInput [matAutocomplete]="parentAuto" formControlName="parentId" class="forms-control" placeholder="Parent"
+              (focus)="applyFilter($event, 'parentId')" (input)="applyFilter($event, 'parentId')">
+            <mat-autocomplete #parentAuto="matAutocomplete" (optionSelected)="onParentOptionSelected($event)">
+              <mat-option *ngFor="let item of filterOptionsParentList" [value]="item">
+                {{ item.parentName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+
+
+          <!-- Module Field -->
+          <!-- <div class="form-group mb-1">
+            <label for="moduleId" class="forms-label text-end">Module</label>
+            <input matInput [matAutocomplete]="moduleAuto" [formControl]="moduleDisplayControl" class="forms-control"
+              placeholder="Module" type="text">
+            <mat-autocomplete #moduleAuto="matAutocomplete" [displayWith]="displayModuleFn"
+              (optionSelected)="onModuleOptionSelected($event)">
+              <mat-option *ngFor="let item of filterOptionsModuleList" [value]="item">
+                {{ item.moduleName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+          <!-- Parent Field -->
+          <!-- <div class="form-group mb-1">
+            <label for="parentId" class="forms-label text-end">Parent</label>
+            <input matInput [matAutocomplete]="parentAuto" [formControl]="parentDisplayControl" formControlName="parentId" class="forms-control"
+              placeholder="Parent" type="text">
+            <mat-autocomplete #parentAuto="matAutocomplete" [displayWith]="displayParentFn"
+              (optionSelected)="onParentOptionSelected($event)">
+              <mat-option *ngFor="let item of filterOptionsParentList" [value]="item">
+                {{ item.parentName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div> -->
+
+
+
+          <div class="row mt-2 float-end font-16">
+            <div class="btn-group text-end">
+              <button class="px-5" mat-raised-button color="primary">Save</button>
+              <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">Reset</button>
+              <button class="px-5 ms-1" mat-stroked-button color="primary">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search"
+        type="text">
+      <div class="row">
+        <h2>All Screens</h2>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="screenId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Screen ID </th>
+            <td mat-cell *matCellDef="let row">{{row.screenId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="screenName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Screen Name</th>
+            <td mat-cell *matCellDef="let row">{{row.screenName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="controllerName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Controller Name</th>
+            <td mat-cell *matCellDef="let row">{{row.controllerName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actionName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Action Name</th>
+            <td mat-cell *matCellDef="let row">{{row.actionName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="moduleName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Module Name</th>
+            <td mat-cell *matCellDef="let row">{{row.moduleName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="parentName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Parent Name</th>
+            <td mat-cell *matCellDef="let row">{{row.parentName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+            <td mat-cell *matCellDef="let row">{{row.startDate}}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+
+              <button mat-icon-button matTooltip="Edit Screen" class="tbl-Action-btn" color="primary" aria-label="Edit"
+                (click)="onEditScreen(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Screen Detail" color="basic" class="tbl-Action-btn" aria-label="info"
+                (click)="screenDetail(row.screenId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete Screen" color="warn" class="tbl-Action-btn" aria-label="Delete"
+                (click)="confirmationRowDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-body"></tr>
+
+          <tr *matNoDataRow class="mat-row">
+            <td colspan="2" class="mat-cell">No record found.{{input.value}}</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 23, 100]" aria-lebel="Select page of users"></mat-paginator>
+        <!-- <mat-paginator [length]="resultsLength" [pageSize]="40" aria-label="Select page of GitHub search results"></mat-paginator> -->
+      </div>
+    </div>
+  </div>
+
+
+  <ng-template #ScreenDetailDialog let-screenData>
+    <h2 mat-dialog-title *ngIf="screenData.loginName">Detail of {{screenData.loginName }} </h2>
+    <mat-dialog-content>
+      <div class="row g-3">
+        <table>
+          <tr>
+            <th>Screeb ID:</th>
+            <td>{{ screenData.screenId }}</td>
+          </tr>
+          <tr>
+            <th>Screen Name:</th>
+            <td>{{ screenData?.screenName }}</td>
+          </tr>
+          <tr>
+            <th>Controller Name:</th>
+            <td>{{ screenData?.controllerName }}</td>
+          </tr>
+          <tr>
+            <th>User Group:</th>
+            <td>{{ screenData?.actionName }}</td>
+          </tr>
+          <tr>
+            <th>Start Date:</th>
+            <td>{{ screenData?.moduleName }}</td>
+          </tr>
+          <tr>
+            <th>End Date:</th>
+            <td>{{ screenData?.parentName }}</td>
+          </tr>
+        </table>
+      </div>
+    </mat-dialog-content>
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close>Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #ConfirmationDelete let-screen>
+    <h2 mat-dialog-title>Confirm Delete</h2>
+    <mat-dialog-content>
+      Are you sure you want to delete {{screen?.screenName }} ?
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close color="primary">Cancel</button>
+      <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+    </mat-dialog-actions>
+  </ng-template>

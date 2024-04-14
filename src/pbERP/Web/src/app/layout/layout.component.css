@@ -1,0 +1,26 @@
+img.Logo {
+  height: 70%;
+}
+.separator {
+  flex: 1 1 auto;
+}
+.mat-drawer-container{
+  height: calc(205vh - 115vh);
+}
+/* .mat-drawer {
+  width: 240px;
+} */
+.side-bar{
+  background-color: #eee;;
+}
+
+.mat-drawer.mat-drawer-side {
+  z-index: 2;
+  background-color: #fff;
+}
+.mat-expanded {padding-bottom: 0px !important;padding-top: 0 !important;}
+
+mat-nav-list.mat-mdc-nav-list.mat-mdc-list-base.mdc-list.ng-star-inserted {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}

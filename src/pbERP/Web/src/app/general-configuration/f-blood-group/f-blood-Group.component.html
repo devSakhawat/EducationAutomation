@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="form-part" *ngIf="bloodGroupForm">
+    <form [formGroup]="bloodGroupForm" (ngSubmit)="ngSubmit()">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="form-group mb-1">
+            <label for="bloodGroupId" class="forms-label text-end">Blood Group ID</label>
+            <input matInput formControlName="bloodGroupId" readonly type="number" class="forms-control">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="bloodGroupName" class="forms-label text-end">Blood Group Name</label>
+            <input matInput formControlName="bloodGroupName" class="forms-control" placeholder="Blood Group Name" type="text">
+          </div>
+          <div class="row my-2 float-end font-16">
+            <div class="btn-group text-end">
+              <button class="px-5" mat-raised-button color="primary">
+                {{ (bloodGroupForm.get('bloodGroupId')!.value ) ? 'Update' : 'Save' }}
+              </button>
+              <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">Reset</button>
+              <button class="px-5 ms-1" mat-stroked-button color="primary">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search" type="text">
+      <div class="row">
+        <h2>All Screens</h2>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="bloodGroupId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Blood Group ID </th>
+            <td mat-cell *matCellDef="let row">{{row.bloodGroupId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="bloodGroupName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Blood Group Name</th>
+            <td mat-cell *matCellDef="let row">{{row.bloodGroupName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+              <button mat-icon-button matTooltip="Edit" class="tbl-Action-btn" color="primary" aria-label="Edit"
+                (click)="onEdit(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Detail" color="basic" class="tbl-Action-btn" aria-label="info"
+                (click)="onDetail(row.bloodGroupId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete" color="warn" class="tbl-Action-btn" aria-label="Delete"
+                (click)="onDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-body"></tr>
+
+          <tr *matNoDataRow class="mat-row">
+            <td colspan="2" class="mat-cell">No record found.{{input.value}}</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 23, 100]" aria-lebel="Select page of users"></mat-paginator>
+        <!-- <mat-paginator [length]="resultsLength" [pageSize]="40" aria-label="Select page of GitHub search results"></mat-paginator> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #DetailDialog let-data>
+  <h2 mat-dialog-title *ngIf="data.bloodGroupName">Detail of <strong>{{data.bloodGroupName}}</strong></h2>
+  <mat-dialog-content>
+    <div class="row g-3">
+      <table>
+        <tr>
+          <th>Blood Group ID</th>
+          <td>{{data.bloodGroupId}}</td>
+        </tr>
+        <tr>
+          <th>Blood Group Name</th>
+          <td>{{data.bloodGroupName}}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+<ng-template #DeleteDialog let-data>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+  <mat-dialog-content>
+    Are you sure you want to delete <strong>{{data.bloodGroupName}}</strong>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+  </mat-dialog-actions>
+</ng-template>

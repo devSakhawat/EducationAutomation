@@ -1,0 +1,43 @@
+<div class="form-part" *ngIf="linkTransportAreaForm">
+  <form [formGroup]="linkTransportAreaForm">
+    <!-- linkAreaTransportId -->
+    <input type="number" formControlName="linkAreaTransportId" hidden />
+    <!-- Transport Dropdown -->
+    <div>
+      <label for="transportId">Select Transport</label>
+      <select id="transportId" formControlName="transportId">
+        <option *ngIf="transports; else loadingPlaceholder" [value]="null" selected>
+          -- Select Transport --
+        </option>
+        <option *ngFor="let transport of transports" [value]="transport.transportId">
+          {{ transport.transportName }}
+        </option>
+      </select>
+      <ng-template #loadingPlaceholder>
+        <option value="" disabled selected>Loading Transport...</option>
+      </ng-template>
+    </div>
+
+    <!-- Transport Areas -->
+    <div>
+      <label>Transport Areas</label>
+      <div formArrayName="areas">
+        <div *ngFor="let area of areasArray.controls; let i = index" (click)="toggleCheckbox(i)">
+          <input type="checkbox" [formControl]="convertToFormControl(area.get('isChecked'))" />
+          <label>{{ area.value.transportAreaName }}</label>
+          <input type="hidden" [formControl]="convertToFormControl(area.get('transportAreaId'))" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2 float-end font-16">
+      <div class="btn-group text-end">
+        <button class="px-5" mat-raised-button color="primary" (click)="onSubmit()">
+          {{ linkTransportAreaForm.get("linkAreaTransportId")!.value ? "Update" : "Save" }}
+        </button>
+        <button class="px-5 ms-1" type="button" mat-raised-button (click)="resetForm()"> Reset </button>
+        <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+      </div>
+    </div>
+  </form>
+</div>

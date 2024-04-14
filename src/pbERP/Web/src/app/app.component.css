@@ -1,0 +1,38 @@
+
+/* sticky */
+.sticky {
+  position: sticky; 
+  top: 0;
+  width: 100%;
+}
+
+img.Logo {
+  height: auto;
+  width: 50px;
+}
+
+
+.drawer-container
+{
+  /* margin-top: 3px; */
+  background-color: #f8f8f8 !important;
+}
+
+.drawer[_ngcontent-ng-c1341180794] {
+  min-width: 200px;
+  background-color: #d6d4d4 !important;
+  position: absolute;
+  top: -7px;
+  left: 0;
+}
+
+.drawer a
+{
+  transition: border 0.3s;
+}
+
+
+.sidebar-navlist
+{
+  background-color: #e6e4e4 !important;
+}

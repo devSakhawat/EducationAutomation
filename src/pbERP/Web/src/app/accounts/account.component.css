@@ -1,0 +1,52 @@
+.leftSidebar {
+	width: 180px;
+	height: 100%;
+	position: absolute !important;
+	left: 0;
+	top: 70px;
+	z-index: 1;
+	overflow: auto;
+	 background:#e9e9ed;
+	 box-shadow: 0 6px 12px #333
+}
+.leftSidebar .fa{ margin-right: 10px }
+.tablink{
+	width: 100%;
+	display: block;
+	padding: 6px 16px;
+	font-size: 14px;
+	color: #051665;
+	text-align: left;
+	text-transform: uppercase;
+	border: none;
+	white-space: normal;
+	float: none;
+	outline: 0;
+	cursor: pointer;
+	border-top: 1px #fff solid;
+	border-bottom: 1px #ddd solid;
+}
+.tablink.home{ background: #c7cbcf; margin-top: -1px}
+
+
+/* Angular Css */
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 20%;
+}
+
+
+
+.th-center{
+  text-align: center;
+}
+.th-left{
+  text-align: left;
+}
+.th-right{
+  text-align: right;
+}

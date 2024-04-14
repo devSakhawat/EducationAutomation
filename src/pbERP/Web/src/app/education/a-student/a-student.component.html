@@ -1,0 +1,533 @@
+<div class="row">
+  <div class="form-part">
+    <div class="row">
+      <h2 class="text-center">Create Student</h2>
+      <div class="form-part" *ngIf="studentForm">
+        <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+          <div class="row g-3">
+            <div class="col-6">
+              <!-- StudentID -->
+              <div>
+                <!-- <label for="studentId" class="forms-label text-end">Student ID</label> -->
+                <input id="studentId" class="forms-control" type="number" formControlName="studentId"
+                  placeholder="Student ID" hidden />
+              </div>
+
+              <!-- Student Code -->
+              <div class="form-group mb-1">
+                <label for="studentCode" class="forms-label text-end">Student Code</label>
+                <input id="studentCode" class="forms-control" type="text" formControlName="studentCode"
+                  placeholder="Student Code" />
+                <div *ngIf="
+                    studentForm?.get('studentCode')?.hasError('required') &&
+                    studentForm?.get('studentCode')?.touched
+                  " class="text-danger">
+                  Student Code is required.
+                </div>
+              </div>
+
+              <!-- Student Name -->
+              <div class="form-group mb-1">
+                <label for="studentName" class="forms-label text-end">Student Name</label>
+                <input id="studentName" class="forms-control" type="text" formControlName="studentName"
+                  placeholder="Student Name" />
+                <div *ngIf="
+                    studentForm?.get('studentName')?.hasError('required') &&
+                    studentForm?.get('studentName')?.touched
+                  " class="text-danger">
+                  Student Name is required.
+                </div>
+              </div>
+
+              <!-- Student Father's Name -->
+              <div class="form-group mb-1">
+                <label for="studentFathersName" class="forms-label text-end">Father's Name</label>
+                <input id="studentFathersName" class="forms-control" type="text" formControlName="studentFathersName"
+                  placeholder="Father'''s Name" />
+              </div>
+
+              <!-- Student Mother's Name -->
+              <div class="form-group mb-1">
+                <label for="studentMothersName" class="forms-label text-end">Mother's Name</label>
+                <input id="studentMothersName" class="forms-control" type="text" formControlName="studentMothersName"
+                  autocomplete="off" placeholder="Mother'''s Name" />
+              </div>
+
+              <!-- Gender -->
+              <div class="form-group mb-1">
+                <label for="genderId" class="forms-label text-end">Gender</label>
+                <select class="forms-control" id="genderId" formControlName="genderId" placeholder="Gender">
+                  <option *ngIf="genders; else loadingPlaceholder" [value]="null">
+                    -- Select Gender --
+                  </option>
+                  <option *ngFor="let gender of genders" [value]="gender.genderId">
+                    {{ gender.genderName }}
+                  </option>
+                </select>
+
+                <ng-template #loadingPlaceholder>
+                  <option value="" disabled selected>Loading Gender...</option>
+                </ng-template>
+              </div>
+
+              <!-- Blood Group -->
+              <div class="form-group mb-1">
+                <label for="bloodGroupId" class="forms-label text-end">Blood Group</label>
+                <select class="forms-control" id="bloodGroupId" formControlName="bloodGroupId"
+                  placeholder="Blood Group">
+                  <option *ngIf="bloodGroups; else loadingPlaceholder" [value]="null">
+                    -- Select BloodGroup --
+                  </option>
+                  <option *ngFor="let bloodGroup of bloodGroups" [value]="bloodGroup.bloodGroupId">
+                    {{ bloodGroup.bloodGroupName }}
+                  </option>
+                </select>
+                <ng-template #loadingPlaceholder>
+                  <option value="" disabled selected>
+                    Loading BloodGroup...
+                  </option>
+                </ng-template>
+              </div>
+
+              <!-- Religion -->
+              <div class="form-group mb-1">
+                <label for="religionId" class="forms-label text-end">Religion</label>
+                <select class="forms-control dropdown" id="religionId" formControlName="religionId"
+                  placeholder="Religion">
+                  <option *ngIf="religions; else loadingPlaceholder" [value]="null">
+                    -- Select Religion --
+                  </option>
+                  <ng-container *ngFor="let religion of religions; let first = first">
+                    <option [value]="religion.religionId" [selected]="first">
+                      {{ religion.religionName }}
+                    </option>
+                  </ng-container>
+                </select>
+
+                <ng-template #loadingPlaceholder>
+                  <option value="" disabled selected>
+                    Loading religions...
+                  </option>
+                </ng-template>
+              </div>
+              <!-- Preview Image -->
+              <div class="form-group mb-1">
+                <label for="studentImage" class="forms-label text-end">Student Photo</label>
+                <input class="forms-control" type="file" formControlName="studentImage" id="studentImage"
+                  (change)="onFileSelected($event)" accept="image/*" />
+              </div>
+
+              <!-- Display Image Preview -->
+              <div *ngIf="selectedFile || imagePreviewUrl" class="priview flex-container">
+                <!-- <h3>Preview:</h3> -->
+                <img [src]="imagePreviewUrl" alt="studentForm.value.name" class="selected-image" />
+              </div>
+            </div>
+
+            <div class="col-6">
+              <h4 class="text-center">Present Address</h4>
+
+              <!-- Present Address -->
+              <div class="form-group mb-1">
+                <label for="presentAddress" class="forms-label text-end">Present Address</label>
+                <input class="forms-control" type="text" formControlName="presentAddress" id="presentAddress"
+                  autocomplete="off" placeholder="Present Address" />
+              </div>
+
+              <!-- Present Post Office -->
+              <div class="form-group mb-1">
+                <label for="presentPostOffice" class="forms-label text-end">Present Post Office</label>
+                <input class="forms-control" type="text" formControlName="presentPostOffice" id="presentPostOffice"
+                  autocomplete="off" placeholder="Post Office" />
+              </div>
+
+              <!-- Present Police Station -->
+              <div class="form-group mb-1">
+                <label for="presentPoliceStationName" class="forms-label text-end">Present Police Station</label>
+                <input matInput [matAutocomplete]="presentPSAuto" formControlName="presentPoliceStationName"
+                  class="forms-control" id="presentPoliceStationName" placeholder="Police Station"
+                  (focus)="applyFilterPresentPS($event, 'presentPSId')"
+                  (input)="applyFilterPresentPS($event, 'presentPSId')" type="text" />
+                <mat-autocomplete #presentPSAuto="matAutocomplete" (optionSelected)="onPresentPSSelected($event)">
+                  <mat-option *ngFor="let item of filterPresentPSs" [value]="item">
+                    {{ item.policeStationName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <!-- Present District -->
+              <div class="form-group mb-1">
+                <label for="presentDistrictName" class="forms-label text-end">Present District</label>
+                <input matInput [matAutocomplete]="presentDistrictAuto" formControlName="presentDistrictName"
+                  class="forms-control" id="presentDistrictName" placeholder="Presennt District" (focus)="
+                    applyFilterPresentDistrict($event, 'presentDistrictId')
+                  " (input)="
+                    applyFilterPresentDistrict($event, 'presentDistrictId')
+                  " type="text" />
+                <mat-autocomplete #presentDistrictAuto="matAutocomplete"
+                  (optionSelected)="onPresentDistrictSelected($event)">
+                  <mat-option *ngFor="let item of filterPresentDistricts" [value]="item">
+                    {{ item.districtName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <!-- Present Division -->
+              <div class="form-group mb-1">
+                <label for="presentDivisionName" class="forms-label text-end">Present Division</label>
+                <input matInput [matAutocomplete]="presentDivisionAuto" formControlName="presentDivisionName"
+                  class="forms-control" id="presentDivisionName" placeholder="Presennt Division" (focus)="
+                    applyFilterPresentDivision($event, 'presentDivisionId')
+                  " (input)="
+                    applyFilterPresentDivision($event, 'presentDivisionId')
+                  " type="text" />
+                <mat-autocomplete #presentDivisionAuto="matAutocomplete"
+                  (optionSelected)="onPresentDivisionSelected($event)">
+                  <mat-option *ngFor="let item of filterPresentDivisions" [value]="item">
+                    {{ item.divisionName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <!-- Present Country -->
+              <div class="form-group mb-1">
+                <label for="presentCountryName" class="forms-label text-end">Present Country</label>
+                <input matInput [matAutocomplete]="presentCountryAuto" formControlName="presentCountryName"
+                  class="forms-control" id="presentCountryName" placeholder="Presennt Country" (focus)="
+                    applyFilterPresentCountry($event, 'presentCountryId')
+                  " (input)="
+                    applyFilterPresentCountry($event, 'presentCountryId')
+                  " type="text" />
+                <mat-autocomplete #presentCountryAuto="matAutocomplete"
+                  (optionSelected)="onPresentCountrySelected($event)">
+                  <mat-option *ngFor="let item of filterPresentCountries" [value]="item">
+                    {{ item.countryName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <!-- Permanent Address -->
+              <h4 class="text-center">Permanent Address</h4>
+              <div class="form-group mb-1">
+                <label for="permanentAddress" class="forms-label text-end">Premanent Address</label>
+                <input class="forms-control" type="text" formControlName="permanentAddress" id="permanentAddress"
+                  autocomplete="off" placeholder="Premanent Address" />
+              </div>
+
+              <!-- Permanent Post Office -->
+              <div class="form-group mb-1">
+                <label for="permanentPostOffice" class="forms-label text-end">Permanent Post Office</label>
+                <input class="forms-control" type="text" formControlName="permanentPostOffice" id="permanentPostOffice"
+                  autocomplete="off" placeholder="Post Office" />
+              </div>
+
+              <!-- Permanent Police Station -->
+              <div class="form-group mb-1">
+                <label for="permanentPoliceStationName" class="forms-label text-end">Permanent Police Station</label>
+                <input matInput [matAutocomplete]="permanentPSAuto" formControlName="permanentPoliceStationName"
+                  class="forms-control" id="permanentPoliceStationName" placeholder="Police Station"
+                  (focus)="applyFilterPermanentPS($event, 'permanentPSId')"
+                  (input)="applyFilterPermanentPS($event, 'permanentPSId')" type="text" />
+                <mat-autocomplete #permanentPSAuto="matAutocomplete" (optionSelected)="onPermanentPSSelected($event)">
+                  <mat-option *ngFor="let item of filterPermanentPSs" [value]="item">
+                    {{ item.policeStationName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <!-- Permanent District -->
+              <div class="form-group mb-1">
+                <label for="permanentDistrictName" class="forms-label text-end">Permanent District</label>
+                <input matInput [matAutocomplete]="permanentDistrictAuto" formControlName="permanentDistrictName"
+                  class="forms-control" id="permanentDistrictName" placeholder="Presennt District" (focus)="
+                    applyFilterPermanentDistrict($event, 'permanentDistrictId')
+                  " (input)="
+                    applyFilterPermanentDistrict($event, 'permanentDistrictId')
+                  " type="text" />
+                <mat-autocomplete #permanentDistrictAuto="matAutocomplete"
+                  (optionSelected)="onPermanentDistrictSelected($event)">
+                  <mat-option *ngFor="let item of filterPermanentDistricts" [value]="item">
+                    {{ item.districtName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <!-- Permanent Division -->
+              <div class="form-group mb-1">
+                <label for="permanentDivisionName" class="forms-label text-end">Permanent Division</label>
+                <input matInput [matAutocomplete]="permanentDivisionAuto" formControlName="permanentDivisionName"
+                  class="forms-control" id="permanentDivisionName" placeholder="Presennt Division" (focus)="
+                    applyFilterPermanentDivision($event, 'permanentDivisionId')
+                  " (input)="
+                    applyFilterPermanentDivision($event, 'permanentDivisionId')
+                  " type="text" />
+                <mat-autocomplete #permanentDivisionAuto="matAutocomplete"
+                  (optionSelected)="onPermanentDivisionSelected($event)">
+                  <mat-option *ngFor="let item of filterPermanentDivisions" [value]="item">
+                    {{ item.divisionName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <!-- Permanent Country -->
+              <div class="form-group mb-1">
+                <label for="permanentCountryName" class="forms-label text-end">Permanent Country</label>
+                <input matInput [matAutocomplete]="permanentCountryAuto" formControlName="permanentCountryName"
+                  class="forms-control" id="permanentCountryName" placeholder="Presennt Country" (focus)="
+                    applyFilterPermanentCountry($event, 'permanentCountryId')
+                  " (input)="
+                    applyFilterPermanentCountry($event, 'permanentCountryId')
+                  " type="text" />
+                <mat-autocomplete #permanentCountryAuto="matAutocomplete"
+                  (optionSelected)="onPermanentCountrySelected($event)">
+                  <mat-option *ngFor="let item of filterPermanentCountries" [value]="item">
+                    {{ item.countryName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+
+              <div class="row mt-2 float-end font-16">
+                <div class="btn-group text-end">
+                  <button class="px-5" mat-raised-button color="primary">
+                    {{
+                    studentForm.get("studentId")!.value ? "Update" : "Save"
+                    }}
+                  </button>
+                  <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">
+                    Reset
+                  </button>
+                  <button class="px-5 ms-1" mat-stroked-button color="primary">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search"
+        type="text" />
+      <div class="row">
+        <h2>All Students</h2>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- loading start -->
+          <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+            <div class="loading-rate-limit-reached" *ngIf="isRateLimitReached"></div>
+          </div>
+          <!-- end loading -->
+
+          <!-- StudentId Column -->
+          <!-- <ng-container matColumnDef="studentId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>StudentId</th>
+            <td mat-cell *matCellDef="let row">{{ row.studentId }}</td>
+          </ng-container> -->
+
+          <!-- StudentCode Column -->
+          <ng-container matColumnDef="studentCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Student Code
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.studentCode }}</td>
+          </ng-container>
+
+          <!-- Student Name -->
+          <ng-container matColumnDef="studentName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Student Name
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.studentName }}</td>
+          </ng-container>
+
+          <!-- Student Father's Name -->
+          <ng-container matColumnDef="studentFathersName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Student Father's Name
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.studentFathersName }}</td>
+          </ng-container>
+
+          <!-- Student Name English Column -->
+          <ng-container matColumnDef="studentMothersName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Student Mother's Name
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.studentMothersName }}</td>
+          </ng-container>
+
+          <!-- StudentPhoto Column -->
+          <!-- <ng-container matColumnDef="studentPhoto">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Student Photo
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <div class="image-container">
+                <img *ngIf="row.studentPhoto" [src]="getStudentPhotoUrl(row.studentPhoto)" alt="Student Photo"
+                  class="student-image img-fluid" />
+                <span *ngIf="!row.studentPhoto" class="no-image">No Image</span>
+              </div>
+            </td>
+          </ng-container> -->
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+              <button mat-icon-button matTooltip="Edit" class="tbl-Action-btn" color="primary" aria-label="Edit"
+                (click)="onEdit(row.studentId)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Detail" color="basic" class="tbl-Action-btn" aria-label="info"
+                (click)="onDetail(row.studentId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete" color="warn" class="tbl-Action-btn" aria-label="Delete"
+                (click)="onDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-body"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No students found.{{ input.value }}
+            </td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #DetailDialog let-data>
+  <h2 mat-dialog-title *ngIf="data.studentCode">
+    Detail of <strong>{{ data.studentName }}</strong>
+  </h2>
+  <mat-dialog-content>
+    <div class="row g-3">
+      <table>
+        <tr>
+          <th>Student ID</th>
+          <td>{{ data.studentId }}</td>
+        </tr>
+        <tr>
+          <th>Sudent Code</th>
+          <td>{{ data.studentCode }}</td>
+        </tr>
+        <tr>
+          <th>studentName</th>
+          <td>{{ data.studentName }}</td>
+        </tr>
+        <tr>
+          <th>Student Father's Name</th>
+          <td>{{ data.studentFathersName }}</td>
+        </tr>
+        <tr>
+          <th>Student Mother's Name</th>
+          <td>{{ data.studentMothersName }}</td>
+        </tr>
+        <tr>
+          <th>Blood Group</th>
+          <td>{{ data.bloodGroupName }}</td>
+        </tr>
+        <tr>
+          <th>Gender Name</th>
+          <td>{{ data.genderName }}</td>
+        </tr>
+        <tr>
+          <th>Religion Name</th>
+          <td>{{ data.religionName }}</td>
+        </tr>
+        <tr>
+          <th>Present Address</th>
+          <td>{{ data.presentAddress }}</td>
+        </tr>
+        <tr>
+          <th>Post Office</th>
+          <td>{{ data.presentPostOffice }}</td>
+        </tr>
+        <tr>
+          <th>Police Station</th>
+          <td>{{ data.presentPoliceStationName }}</td>
+        </tr>
+        <tr>
+          <th>District</th>
+          <td>{{ data.presentDistrictName }}</td>
+        </tr>
+        <tr>
+          <th>Division</th>
+          <td>{{ data.presentDivisionName }}</td>
+        </tr>
+        <tr>
+          <th>Country</th>
+          <td>{{ data.presentCountryName }}</td>
+        </tr>
+
+        <tr>
+          <th>Permanent Address</th>
+          <td>{{ data.permanentAddress }}</td>
+        </tr>
+        <tr>
+          <th>Post Office</th>
+          <td>{{ data.permanentPostOffice }}</td>
+        </tr>
+        <tr>
+          <th>Police Station</th>
+          <td>{{ data.permanentPoliceStationName }}</td>
+        </tr>
+        <tr>
+          <th>District</th>
+          <td>{{ data.permanentDistrictName }}</td>
+        </tr>
+        <tr>
+          <th>Division</th>
+          <td>{{ data.permanentDivisionName }}</td>
+        </tr>
+        <tr>
+          <th>Country</th>
+          <td>{{ data.permanentCountryName }}</td>
+        </tr>
+
+        <tr>
+          <th>Student Image</th>
+          <td>
+            <div class="image-container">
+              <img *ngIf="data.studentPhoto" [src]="getStudentPhotoUrl(data.studentPhoto)" alt="Student Photo"
+                class="student-image img-fluid" />
+              <span *ngIf="!data.studentPhoto" class="no-image">No Image</span>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+<ng-template #DeleteDialog let-data>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+  <mat-dialog-content>
+    Are you sure you want to delete <strong>{{ data.studentName }}</strong>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+  </mat-dialog-actions>
+</ng-template>
+

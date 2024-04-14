@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="form-part" *ngIf="academicYearForm">
+    <form [formGroup]="academicYearForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <div class="col-6">
+
+          <!-- Academic Year ID -->
+          <div>
+            <!-- <label for="academicYearId" class="forms-label text-end">Academic Year ID</label> -->
+            <input id="academicYearId" class="forms-control" type="number" formControlName="academicYearId" placeholder="Academic Year ID" hidden />
+          </div>
+
+          <!-- Academic Year -->
+          <div class="form-group mb-1">
+            <label for="academicYear" class="forms-label text-end">Academic Year</label>
+            <input id="academicYear" class="forms-control" type="text" formControlName="academicYear" placeholder="Academic Year" />
+            <div *ngIf="academicYearForm?.get('academicYear')?.hasError('required') && academicYearForm?.get('academicYear')?.touched" class="text-danger">
+              Academic Year is required.
+            </div>
+          </div>
+
+          <div class="row mt-2 float-end font-16">
+            <div class="btn-group text-end">
+              <button class="px-5" mat-raised-button color="primary">
+                {{ academicYearForm.get("academicYearId")!.value ? "Update" : "Save" }}
+              </button>
+              <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()"> Reset </button>
+              <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search"
+        type="text" />
+      <div class="row">
+        <h2>All Groups</h2>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- loading start -->
+          <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+            <div class="loading-rate-limit-reached" *ngIf="isRateLimitReached"></div>
+          </div>
+          <!-- end loading -->
+
+          <!-- Academic Year Id Column -->
+          <!-- <ng-container matColumnDef="academicYearId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Section ID</th>
+            <td mat-cell *matCellDef="let row">{{ row.academicYearId }}</td>
+          </ng-container> -->
+
+          <!-- Academic Year  -->
+          <ng-container matColumnDef="academicYear">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Academic Year
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.academicYear }}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+              <button mat-icon-button matTooltip="Edit" class="tbl-Action-btn" color="primary" aria-label="Edit"
+                (click)="onEdit(row.academicYearId)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Detail" color="basic" class="tbl-Action-btn" aria-label="info"
+                (click)="onDetail(row.academicYearId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete" color="warn" class="tbl-Action-btn" aria-label="Delete"
+                (click)="onDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-body"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No shift found.{{ input.value }}
+            </td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #DetailDialog let-data>
+  <h2 mat-dialog-title *ngIf="data.academicYear">
+    Detail of <strong>{{ data.academicYear }}</strong>
+  </h2>
+  <mat-dialog-content>
+    <div class="row g-3">
+      <table>
+        <tr>
+          <th>Academic Year ID</th>
+          <td>{{ data.academicYearId }}</td>
+        </tr>
+        <tr>
+          <th>Academic Year</th>
+          <td>{{ data.academicYear }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+<ng-template #DeleteDialog let-data>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+  <mat-dialog-content>
+    Are you sure you want to delete <strong>{{ data.academicYear }}</strong>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+  </mat-dialog-actions>
+</ng-template>
+

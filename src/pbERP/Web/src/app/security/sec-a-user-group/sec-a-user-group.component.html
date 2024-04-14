@@ -1,0 +1,184 @@
+<div class="row">
+  <div class="form-part" *ngIf="userGroupForm">
+    <form [formGroup]="userGroupForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <div class="width-50%">
+
+          <div class="form-group mb-1">
+            <label class="forms-label text-end">User Group ID:</label>
+            <input matInput class="forms-control" type="number" formControlName="userGroupId" placeholder="User Group ID"
+              readonly>
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="userGroupName" class="forms-label text-end">User Group Name:</label>
+            <input matInput formControlName="userGroupName" placeholder="User Group Name" class="forms-control"
+              id="userGroupName" type="text">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="userGroupNameLocal" class="forms-label text-end">User Group Name Local:</label>
+            <input matInput formControlName="userGroupNameLocal" placeholder="User Group Name Local" class="forms-control"
+              id="userGroupNameLocal" type="text">
+          </div>
+        </div>
+
+        <div class="width-50%">
+          <div class="form-group mb-1">
+            <label for="userGroupDescription" class="forms-label text-end">User Group Description:</label>
+            <input matInput formControlName="userGroupDescription" placeholder="User Group Description"
+              class="forms-control" id="userGroupDescription" type="text">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="userGroupDescriptionLocal" class="forms-label text-end">User Group Description Local:</label>
+            <input matInput formControlName="userGroupDescriptionLocal" placeholder="User Group Description Local"
+              class="forms-control" id="userGroupDescriptionLocal" type="text">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="userGroupSaleDiscount" class="forms-label text-end">User Group Sale Discount:</label>
+            <input matInput formControlName="userGroupSaleDiscount" placeholder="User Group Sale Discount"
+              class="forms-control" id="userGroupSaleDiscount" type="text">
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2 float-end font-14">
+
+        <div class="btn-group text-end">
+          <button class="px-5" mat-raised-button color="primary">
+            {{ userGroupForm.get('userGroupId')!.value ? 'Update' : 'Save' }}
+          </button>
+          <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">Reset</button>
+          <button class="px-5 ms-1" mat-stroked-button color="primary">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilter($event)" #input class="search-form mb-1" placeholder="Search" type="text">
+      <div class="row">
+        <h2>All Student</h2>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="userGroupId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> User Group </th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="userGroupName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group Name</th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="userGroupNameLocal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group Name Local</th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupNameLocal}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="userGroupDescription">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group Description English</th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupDescription}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="userGroupDescriptionLocal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group Description Local</th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupDescriptionLocal}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="userGroupSaleDiscount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>User Group Sale Discount</th>
+            <td mat-cell *matCellDef="let row">{{row.userGroupSaleDiscount}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+
+              <!-- <button mat-icon-button matTooltip="Edit User Group" class="tbl-Action-btn" color="primary" aria-label="Edit"              
+              (click)="userGroupForm.patchValue(row)">
+                <mat-icon>edit</mat-icon>
+              </button> -->
+
+              <button mat-icon-button matTooltip="Edit User Group" class="tbl-Action-btn" color="primary"
+                aria-label="Edit" (click)="onEditClick(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="User Group Detail" color="basic" class="tbl-Action-btn"
+                aria-label="info" (click)="userGroupDetail(row.userGroupId)">
+                <mat-icon>info</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="User Group Delete" color="warn" class="tbl-Action-btn"
+                aria-label="Delete" (click)="confirmDeleteUserGroup(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-body"></tr>
+
+          <tr *matNoDataRow class="mat-row">
+            <td colspan="2" class="mat-cell">No User group found.{{input.value}}</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 23, 100]" aria-lebel="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #UserGroupDetailDialog let-userGroup>
+  <h2 mat-dialog-title>Detail of {{userGroup?.userGroupNameEnglish }} </h2>
+  <mat-dialog-content>
+      <div class="row g-3">
+        <table>
+          <tr>
+            <th>User Group ID:</th>
+            <td>{{ userGroup?.userGroupId }}</td>
+          </tr>
+          <tr>
+            <th>User Group Name:</th>
+            <td>{{ userGroup?.userGroupName }}</td>
+          </tr>
+          <tr>
+            <th>User Group Name Local:</th>
+            <td>{{ userGroup?.userGroupNameLocal }}</td>
+          </tr>
+          <tr>
+            <th>User Group Description:</th>
+            <td>{{ userGroup?.userGroupDescription }}</td>
+          </tr>
+          <tr>
+            <th>User Group Name Local:</th>
+            <td>{{ userGroup?.userGroupDescriptionLocal }}</td>
+          </tr>
+          <tr>
+            <th>User Group Sale Discount:</th>
+            <td>{{ userGroup?.userGroupSaleDiscount }}</td>
+          </tr>
+          <!-- Add other fields as needed -->
+        </table>       
+      </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+
+<ng-template #ConfirmationDelete let-userGroup>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+<mat-dialog-content>
+  Are you sure you want to delete  {{userGroup?.userGroupNameEnglish }}  user group?
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close color="primary">Cancel</button>
+  <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+</mat-dialog-actions>
+</ng-template>

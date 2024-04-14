@@ -1,0 +1,43 @@
+<div class="form-part" *ngIf="linkClassGroupForm">
+  <form [formGroup]="linkClassGroupForm">
+    <!-- linkClassGroupId -->
+    <input type="number" formControlName="linkClassGroupId" hidden />
+    <!-- Class Dropdown -->
+    <div>
+      <label for="classId">Select Class</label>
+      <select id="classId" formControlName="classId">
+        <option *ngIf="classes; else loadingPlaceholder" [value]="null" selected>
+          -- Select Class --
+        </option>
+        <option *ngFor="let class of classes" [value]="class.classId">
+          {{ class.className }}
+        </option>
+      </select>
+      <ng-template #loadingPlaceholder>
+        <option value="" disabled selected>Loading Class...</option>
+      </ng-template>
+    </div>
+
+    <!-- Class Group -->
+    <div>
+      <label>Class Groups</label>
+      <div formArrayName="groups">
+        <div *ngFor="let group of groupsArray.controls; let i = index" (click)="toggleCheckbox(i)">
+          <input type="checkbox" [formControl]="convertToFormControl(group.get('isChecked'))" />
+          <label>{{ group.value.classGroupName }}</label>
+          <input type="hidden" [formControl]="convertToFormControl(group.get('classGroupId'))" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2 float-end font-16">
+      <div class="btn-group text-end">
+        <button class="px-5" mat-raised-button color="primary" (click)="onSubmit()">
+          {{ linkClassGroupForm.get("linkClassGroupId")!.value ? "Update" : "Save" }}
+        </button>
+        <button class="px-5 ms-1" type="button" mat-raised-button (click)="resetForm()"> Reset </button>
+        <button class="px-5 ms-1" mat-stroked-button color="primary"> Close </button>
+      </div>
+    </div>
+  </form>
+</div>

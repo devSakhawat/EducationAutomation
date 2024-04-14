@@ -1,0 +1,134 @@
+<div class="row">
+  <div class="form-part" *ngIf="districtOrCityForm">
+    <form [formGroup]="districtOrCityForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="form-group mb-1">
+            <label for="districtId" class="forms-label text-end">District ID</label>
+            <input matInput formControlName="districtId" readonly type="number" class="forms-control">
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="districtName" class="forms-label text-end">District Name</label>
+            <input id="districtName" formControlName="districtName" class="forms-control" placeholder="District Name" type="text">
+            <div *ngIf="districtOrCityForm?.get('districtName')?.hasError('required') && districtOrCityForm?.get('districtName')?.touched" class="text-danger">
+              District name is required.
+            </div>
+          </div>
+
+          <div class="form-group mb-1">
+            <label for="divisionName" class="forms-label text-end">Division</label>
+            <input matInput formControlName="divisionName" (focus)="applyFilter($event, 'divisionId')"
+              (input)="applyFilter($event, 'divisionId')" [matAutocomplete]="divisionAuto" class="forms-control"
+              placeholder="Division" type="text" />
+            <mat-autocomplete #divisionAuto="matAutocomplete" (optionSelected)="onDivisionSelected($event)">
+              <mat-option *ngFor="let item of filterDivisions" [value]="item">
+                {{ item.divisionName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+
+          <div class="row my-2 float-end font-16">
+            <div class="btn-group text-end">
+              <button class="px-5" mat-raised-button color="primary">
+                {{ (districtOrCityForm.get('districtId')!.value ) ? 'Update' : 'Save' }}
+              </button>
+              <button class="px-5 ms-1" type="reset" mat-raised-button (click)="resetForm()">Reset</button>
+              <button class="px-5 ms-1" mat-stroked-button color="primary">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-part">
+    <div class="row">
+      <input matInput (keyup)="applyFilterDataTable($event)" #input class="search-form mb-1" placeholder="Search" type="text">
+      <div class="row">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="districtId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> District ID </th>
+            <td mat-cell *matCellDef="let row">{{row.districtId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="districtName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>District Name</th>
+            <td mat-cell *matCellDef="let row">{{row.districtName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="divisionName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Division Name</th>
+            <td mat-cell *matCellDef="let row">{{row.divisionName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="text-end">
+              <button mat-icon-button matTooltip="Edit" class="tbl-Action-btn" color="primary" aria-label="Edit"
+                (click)="onEdit(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Detail" color="basic" class="tbl-Action-btn" aria-label="info"
+                (click)="onDetail(row.districtId)">
+                <mat-icon>info</mat-icon>
+              </button>
+
+              <button mat-icon-button matTooltip="Delete" color="warn" class="tbl-Action-btn" aria-label="Delete"
+                (click)="onDelete(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-body"></tr>
+
+          <tr *matNoDataRow class="mat-row">
+            <td colspan="2" class="mat-cell">No record found.{{input.value}}</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 23, 100]" aria-lebel="Select page of users"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #DetailDialog let-data>
+  <h2 mat-dialog-title *ngIf="data.districtName">Detail of <strong>{{data.districtName}}</strong></h2>
+  <mat-dialog-content>
+    <div class="row g-3">
+      <table>
+        <tr>
+          <th>District ID</th>
+          <td>{{data.districtId}}</td>
+        </tr>
+        <tr>
+          <th>District Name</th>
+          <td>{{data.districtName}}</td>
+        </tr>
+        <tr>
+          <th>Division Name</th>
+          <td>{{data.divisionName}}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>
+
+<ng-template #DeleteDialog let-data>
+  <h2 mat-dialog-title>Confirm Delete</h2>
+  <mat-dialog-content>
+    Are you sure you want to delete <strong>{{data.districtName}}</strong>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="warn">Delete</button>
+  </mat-dialog-actions>
+</ng-template>
